@@ -1,8 +1,8 @@
 temp <- tempfile()
 #downloading the data
-#download.file("https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip",temp)
+download.file("https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip",temp)
 #unzipping the temp file and saving it in the current working directory
-#unzip(temp)
+unzip(temp)
 
 ################1.Creating the data frame #######################
 
@@ -16,7 +16,7 @@ subj_train <- read.table("UCI HAR Dataset/train/subject_train.txt")
 
 #combining the three tables into one train data frame
 train <- cbind(subj_train, trainY, trainX)
-
+dim(train)
 #reading in the test data
 #reading in the X_test data
 testX <- read.table("UCI HAR Dataset/test/X_test.txt")
@@ -27,10 +27,12 @@ subj_test <- read.table("UCI HAR Dataset/test/subject_test.txt")
 
 #combining the three tables into one test data frame
 test <- cbind(subj_test, testY, testX)
-
+dim(test)
 ##combining the train and test data frames
 total <- rbind(train,test)
 
+
+###### 4. Labelling the columns #########
 #reading in the features
 feat <- read.table("UCI HAR Dataset/features.txt")
 
@@ -57,10 +59,9 @@ levels(total$Activity) <- c("1"="WALKING", "2"="WALKING_UPSTAIRS",
                             "3"="WALKING_DOWNSTAIRS", "4"="SITTING", "5"="STANDING",
                             "6"="LAYING")
 
-############4. Describing Variable Names###########
-
 
 ##########5. Calculating the mean of variables for each case ##########
+install.packages("reshape2")
 library(reshape2)
 totalMelt <- melt(total, id=c("Subject", "Activity"), 
                   measure.vars=colnames(total)[-c(1,2)])
